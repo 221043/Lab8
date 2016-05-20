@@ -10,12 +10,14 @@ public class Fermata {
 	private String nome;
 	private double coordX, coordY;
 	private Map<Fermata, Double> archi;
+	private String linea;
 	
 	public Fermata(String nome, double coordX, double coordY) {
 		this.nome = nome;
 		this.coordX = coordX;
 		this.coordY = coordY;
 		archi = new HashMap<>();
+		linea = null;
 	}
 
 	public String getNome() {
@@ -60,16 +62,20 @@ public class Fermata {
 		List<Fermata> elenco = new ArrayList<>(archi.keySet());
 		return elenco;
 	}
+	
+	public String getLinea() {
+		return linea;
+	}
+
+	public void setLinea(String linea) {
+		this.linea = linea;
+	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		long temp;
-		temp = Double.doubleToLongBits(coordX);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
-		temp = Double.doubleToLongBits(coordY);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
+		result = prime * result + ((linea == null) ? 0 : linea.hashCode());
 		result = prime * result + ((nome == null) ? 0 : nome.hashCode());
 		return result;
 	}
@@ -83,9 +89,10 @@ public class Fermata {
 		if (getClass() != obj.getClass())
 			return false;
 		Fermata other = (Fermata) obj;
-		if (Double.doubleToLongBits(coordX) != Double.doubleToLongBits(other.coordX))
-			return false;
-		if (Double.doubleToLongBits(coordY) != Double.doubleToLongBits(other.coordY))
+		if (linea == null) {
+			if (other.linea != null)
+				return false;
+		} else if (!linea.equals(other.linea))
 			return false;
 		if (nome == null) {
 			if (other.nome != null)

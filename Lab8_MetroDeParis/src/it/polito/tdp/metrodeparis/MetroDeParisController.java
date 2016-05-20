@@ -48,6 +48,10 @@ public class MetroDeParisController {
     		txtResult.setText("Scegliere fermata di arrivo");
     		return;
     	}
+    	if(a.compareTo(b)==0){
+    		txtResult.setText("Stazione di partenza e arrivo coincidenti");
+    		return;
+    	}
     	Fermata A = model.getFermata(a);
     	Fermata B = model.getFermata(b);
     	List<Fermata> cammino = model.calcolaPercorso(A, B);
@@ -55,7 +59,16 @@ public class MetroDeParisController {
     		txtResult.setText("Stazioni non connesse");
     		return;
     	}
-    	txtResult.setText("Percorso: "+cammino);
+    	txtResult.setText("Percorso: ");
+    	String linea="";
+    	for(Fermata f:cammino){
+    		if(f.getLinea().compareTo(linea)==0)
+    			txtResult.appendText(", "+f);
+    		else{
+    			linea = f.getLinea();
+    			txtResult.appendText("\n\nPrendo Linea: "+linea+"\n"+f);
+    		}
+    	}
     	int ore = model.getTime(cammino)/3600;
     	int minuti = (model.getTime(cammino)-ore*3600)/60;
     	int secondi = model.getTime(cammino)-ore*3600-minuti*60;
@@ -68,7 +81,7 @@ public class MetroDeParisController {
         cbPartenza.setItems(fermate);
         cbArrivo.setItems(fermate);
     	model.createGraph();
-//        model.calcolaCammini();
+        model.calcolaCammini();
         btnPercorso.setDisable(false);
     }
     
